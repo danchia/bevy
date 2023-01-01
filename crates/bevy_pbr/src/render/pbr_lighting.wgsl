@@ -229,9 +229,7 @@ fn spot_light(
     return point_light * spot_attenuation;
 }
 
-fn directional_light(light: DirectionalLight, roughness: f32, NdotV: f32, normal: vec3<f32>, view: vec3<f32>, R: vec3<f32>, F0: vec3<f32>, diffuseColor: vec3<f32>) -> vec3<f32> {
-    let incident_light = light.direction_to_light.xyz;
-
+fn directional_light(incident_light: vec3<f32>, color: vec3<f32>, roughness: f32, NdotV: f32, normal: vec3<f32>, view: vec3<f32>, R: vec3<f32>, F0: vec3<f32>, diffuseColor: vec3<f32>) -> vec3<f32> {
     let half_vector = normalize(incident_light + view);
     let NoL = saturate(dot(normal, incident_light));
     let NoH = saturate(dot(normal, half_vector));
@@ -241,5 +239,5 @@ fn directional_light(light: DirectionalLight, roughness: f32, NdotV: f32, normal
     let specularIntensity = 1.0;
     let specular_light = specular(F0, roughness, half_vector, NdotV, NoL, NoH, LoH, specularIntensity);
 
-    return (specular_light + diffuse) * light.color.rgb * NoL;
+    return (specular_light + diffuse) * color * NoL;
 }
